@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -39,6 +40,7 @@ public class UserServiceImpl {
         User adminUser = new User();
         adminUser.setNom("admin");
         adminUser.setPrenom("admin");
+        adminUser.setEmail("eya@esprit.tn");
         adminUser.setPassword(getEncodedPassword("admin@pass"));
         adminUser.setUserName("admin123");
         Set<Role> adminRoles = new HashSet<>();
@@ -65,5 +67,34 @@ public class UserServiceImpl {
     }
 
 
+    public boolean ifEmailExist(String mail){
+        return userRepository.existsByEmail(mail);
+    }
+
+    public User getUserByMail(String mail){
+        return userRepository.findByEmail(mail);
+    }
+
+   /* public User createUserWithGoogle(User user) {
+        Role role = roleRepository.findById("Etudiant").get();
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(role);
+        user.setRole(userRoles); //affecter le role Etudiant au user par défaut
+        user.setUserName("GoogleUser");
+        user.setPassword(passwordEncoder.encode("GoogleAuht"));
+
+        return userRepository.save(user);
+    }
+    */
+
+
+    public List<User> retrieveAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public String deleteUser(String userName) {
+        userRepository.deleteById(userName);
+        return "Etudiant removed !! " + userName;
+    }
 
 }

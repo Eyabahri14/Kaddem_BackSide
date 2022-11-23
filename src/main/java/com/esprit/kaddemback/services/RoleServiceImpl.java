@@ -13,4 +13,6 @@ public class RoleServiceImpl {
     public Role createNewRole(Role role) {
         return roleRepository.save(role);
     }
+
+
 }

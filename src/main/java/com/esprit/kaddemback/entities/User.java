@@ -11,7 +11,18 @@ public class User {
     private String nom;
     private String prenom;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE",
             joinColumns = { @JoinColumn(name = "USER_ID") },
             inverseJoinColumns = {

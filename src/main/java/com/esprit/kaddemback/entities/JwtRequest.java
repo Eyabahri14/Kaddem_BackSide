@@ -3,6 +3,7 @@ package com.esprit.kaddemback.entities;
 public class JwtRequest {
 
     private String userName;
+
     private String password;
 
     public String getUserName() {
