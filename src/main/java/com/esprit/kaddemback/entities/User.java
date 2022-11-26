@@ -2,6 +2,7 @@ package com.esprit.kaddemback.entities;
 
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -13,6 +14,30 @@ public class User {
     private String password;
 
     private String email;
+    private String fileName;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+
+    private int phoneNumber;
+
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getEmail() {
         return email;
@@ -68,4 +93,13 @@ public class User {
     public void setRole(Set<Role> role) {
         this.role = role;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
 }

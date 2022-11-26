@@ -6,6 +6,7 @@ import com.esprit.kaddemback.entities.Role;
 import com.esprit.kaddemback.entities.User;
 import com.esprit.kaddemback.repositories.UserRepository;
 import com.esprit.kaddemback.services.UserServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -17,8 +18,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,10 +43,15 @@ public class UserController {
 
 
     @PostMapping({"/registerNewUser"})
-    public User registerNewUser(@RequestBody User user){
-
-        return  userService.registerNewUser(user);
+    public String registerNewUser(@RequestParam("user") String user,@RequestParam("file") MultipartFile file) throws JsonProcessingException {
+        return  userService.registerNewUser(user,file);
     }
+
+    @GetMapping(path="/ImgUsers/{userName}")
+    public byte[] getPhoto(@PathVariable("userName") String userName) throws Exception{
+        return userService.getPhoto(userName);
+    }
+
 
 
     @GetMapping({"/forAdmin"})
