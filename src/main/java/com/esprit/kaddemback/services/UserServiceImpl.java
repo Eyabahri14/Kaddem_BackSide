@@ -1,5 +1,6 @@
 package com.esprit.kaddemback.services;
 
+import com.esprit.kaddemback.entities.Certification;
 import com.esprit.kaddemback.entities.Gender;
 import com.esprit.kaddemback.entities.Role;
 import com.esprit.kaddemback.entities.User;
@@ -116,7 +117,17 @@ public class UserServiceImpl {
         return Files.readAllBytes(Paths.get(context.getRealPath("/Images/")+user.getFileName()));
     }
 
+    public User updateUser(User user,String userName) {
+        User existingUser = userRepository.findById(userName).orElse(null);
+        existingUser.setUserName(user.getUserName());
+        existingUser.setNom(user.getNom());
+        existingUser.setPrenom(user.getPrenom());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setGender(user.getGender());
+        existingUser.setPhoneNumber(user.getPhoneNumber());
 
+        return userRepository.save(existingUser);
+    }
     public boolean ifEmailExist(String mail){
         return userRepository.existsByEmail(mail);
     }
@@ -134,6 +145,11 @@ public class UserServiceImpl {
     public String deleteUser(String userName) {
         userRepository.deleteById(userName);
         return "Etudiant removed !! " + userName;
+    }
+
+
+    public User GetUserByUsername(String userName){
+        return  userRepository.findById(userName).get();
     }
 
 }

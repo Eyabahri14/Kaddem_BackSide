@@ -1,29 +1,22 @@
 package com.esprit.kaddemback.controllers;
 
-import com.esprit.kaddemback.entities.JwtRequest;
-import com.esprit.kaddemback.entities.JwtResponse;
-import com.esprit.kaddemback.entities.Role;
 import com.esprit.kaddemback.entities.User;
 import com.esprit.kaddemback.repositories.UserRepository;
+import com.esprit.kaddemback.services.PdfService;
 import com.esprit.kaddemback.services.UserServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -34,6 +27,8 @@ public class UserController {
 
 @Autowired
     UserRepository userRepository;
+    @Autowired
+    private  PdfService pdfService;
 
 
     @PostConstruct //lors de l'execution
@@ -42,10 +37,7 @@ public class UserController {
     }
 
 
-    @PostMapping({"/registerNewUser"})
-    public String registerNewUser(@RequestParam("user") String user,@RequestParam("file") MultipartFile file) throws JsonProcessingException {
-        return  userService.registerNewUser(user,file);
-    }
+
 
     @GetMapping(path="/ImgUsers/{userName}")
     public byte[] getPhoto(@PathVariable("userName") String userName) throws Exception{
@@ -83,6 +75,36 @@ public class UserController {
     @GetMapping("/list")//affichage+pagination
     public Page<User> showPage(@RequestParam(defaultValue = "0") int page){
         return userRepository.findAll(PageRequest.of(page, 4));
+    }
+
+    @GetMapping("/pdf")
+    public void downloadPdf(HttpServletResponse response){
+        try{
+            Path file = Paths.get(pdfService.generateUsersPdf().getAbsolutePath());
+            if (Files.exists(file)){
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition", "attachment; filename"+ file.getFileName());
+                Files.copy(file, response.getOutputStream());
+                response.getOutputStream().flush();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping({"/registerNewUser"})
+    public String registerNewUser(@RequestParam("user") String user,@RequestParam("file") MultipartFile file) throws JsonProcessingException {
+        return  userService.registerNewUser(user,file);
+    }
+
+    @PutMapping("/updateUser/{userName}")
+    public User updateUser(@RequestBody User user,@PathVariable("userName") String userName) {
+        return userService.updateUser(user,userName);
+    }
+
+    @GetMapping(path="/getUser/{userName}")
+    public User getUserByUsername(@PathVariable("userName") String userName) throws Exception{
+        return userService.GetUserByUsername(userName);
     }
 
 

@@ -12,16 +12,22 @@ public class User {
     private String nom;
     private String prenom;
     private String password;
-
     private String email;
     private String fileName;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-
     private int phoneNumber;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "USER_ROLE",
+            joinColumns = { @JoinColumn(name = "USER_ID") },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ROLE_ID") })
+    private Set<Role> role;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Departement departement;
 
     public Gender getGender() {
         return gender;
@@ -46,13 +52,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = { @JoinColumn(name = "USER_ID") },
-            inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID") })
-    private Set<Role> role;
 
     public String getUserName() {
         return userName;

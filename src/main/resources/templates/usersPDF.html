@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../pdf-ressources/css/usersPdfStyle.css" />
+
+</head>
+
+<body>
+<div class="header">
+    <img src="../pdf-resources/images/logo.jpg" alt="" class="logo">
+</div>
+<h1> Liste des utilisateurs</h1>
+
+<table class="table-places  paginate-table">
+    <thead>
+    <tr>
+        <th class="tittle-container">Username</th>
+        <th class="tittle-container">Prenom</th>
+        <th class="tittle-container">Nom</th>
+        <th class="tittle-container">Gender</th>
+        <th class="tittle-container">Telephone</th>
+        <th class="tittle-container">Email</th>
+        <th class="tittle-container">Role</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user: ${users}">
+
+
+        <td th:text="${user.userName}">
+        </td>
+        <td th:text="${user.prenom}">
+        </td>
+        <td th:text="${user.nom}">
+        </td>
+        <td th:text="${user.gender}">
+        </td>
+        <td th:text="${user.phoneNumber}">
+        </td>
+        <td th:text="${user.email}">
+        </td>
+        <td th:text="${user.role[0].roleName}">
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<span> <strong th:text="'Nombre Total des utilisateurs : ' + ${#lists.size(users)}"></strong></span>
+</body>
+
+</html>
+
+</html>
