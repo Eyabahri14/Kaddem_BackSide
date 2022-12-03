@@ -18,6 +18,8 @@ public class User {
     private Gender gender;
     private int phoneNumber;
 
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private Set<Equipe> equipes;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE",
             joinColumns = { @JoinColumn(name = "USER_ID") },
